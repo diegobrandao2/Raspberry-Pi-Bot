@@ -1,2 +1,2 @@
 # Raspberry-Pi-Bot
-Test
+Test repo for raspberry pi gpio control of LN298
