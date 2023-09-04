@@ -14,11 +14,11 @@ def generate_launch_description():
             arguments=[urdf_file_path],
         ),
 
-        #Node(
-            #package='joint_state_publisher',
-            #executable='joint_state_publisher',
-            #name='jsp_node'
-        #),
+        Node(
+            package='joint_state_publisher',
+            executable='joint_state_publisher',
+            name='jsp_node'
+        ),
 
         Node(
             package='rviz2',
