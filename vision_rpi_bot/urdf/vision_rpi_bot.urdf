@@ -27,7 +27,7 @@
     <joint name="base_joint" type="fixed">
         <parent link="base_footprint" />
         <child link="base_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 0" xyz="0 0 0.15" />
     </joint>
 
 
@@ -56,7 +56,7 @@
     <joint name="caster_holder_joint" type="fixed">
         <parent link="base_link" />
         <child link="caster_holder_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 0" xyz="0 -0.19 -0.02" />
     </joint>
 
 
@@ -84,9 +84,9 @@
 
     <joint name="caster_wheel_joint" type="continuous">
         <axis xyz="1 0.0 0.0"/>
-        <parent link="base_link" />
+        <parent link="caster_holder_link" />
         <child link="caster_wheel_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 0" xyz="0 -0.0029 -0.086" />
     </joint>
 
 
@@ -115,10 +115,10 @@
     </link>
 
     <joint name="right_wheel_joint" type="continuous">
-        <axis xyz="0.0 1 0.0"/>
+        <axis xyz="0.0 -1 0.0"/>
         <parent link="base_link" />
         <child link="right_wheel_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 1.57" xyz="-0.235 0.15 -0.05" />
     </joint>
 
 
@@ -149,7 +149,7 @@
         <axis xyz="0.0 1 0.0"/>
         <parent link="base_link" />
         <child link="left_wheel_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 -1.57" xyz="0.235 0.15 -0.05" />
     </joint>
 
 
@@ -178,7 +178,7 @@
     <joint name="camera_joint" type="fixed">
         <parent link="base_link" />
         <child link="camera_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 0" xyz="0 -0.18 0.2" />
     </joint>
 
        <!--///////////////////////////////////////////////COVER LINK///////////////////////////////////////////////////////-->
@@ -206,7 +206,71 @@
     <joint name="cover_joint" type="fixed">
         <parent link="base_link" />
         <child link="cover_link" />
-        <origin rpy="0 0 0" xyz="0 0 0.14" />
+        <origin rpy="0 0 0" xyz="0 0 0.08" />
     </joint>
+
+
+    <!-- //////////////////////////////////   Differential Drive Plugin  //////////////////////////////// -->
+<gazebo>
+      <plugin filename="libgazebo_ros_diff_drive.so" name="vision_rpi_bot_controller">
+        <odometry_frame>odom</odometry_frame>
+        <commandTopic>cmd_vel</commandTopic>
+        <publish_odom>true</publish_odom>
+        <publish_odom_tf>true</publish_odom_tf>
+        <update_rate>15.0</update_rate>
+        <left_joint>left_wheel_joint</left_joint>
+        <right_joint>right_wheel_joint</right_joint>
+        <wheel_separation>0.47</wheel_separation>
+        <wheel_diameter>0.2</wheel_diameter>
+        <max_wheel_acceleration>2</max_wheel_acceleration>
+        <robotBaseFrame>base_link</robotBaseFrame>
+
+      </plugin>
+    </gazebo>
+
+
+    <!-- ///////////////////////////////////////// Camera Plugin ////////////////////// -->
+
+  <gazebo reference="camera_link">
+    <sensor type="camera" name="vision_rpi_bot_camera">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="rpi_bot_camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <visualize>true</visualize>
+        <updateRate>0.0</updateRate>
+        <cameraName>VRB/camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
 
 </robot>
