@@ -311,7 +311,19 @@
     </sensor>
   </gazebo>
 
+
+  <!-- ////////////////// Lidar Link .//////////////// -->
+<link name="lidar_link"/>
+
+ <joint name="lidar_joint" type="fixed">
+    <origin xyz="0 -0.25 0.1" rpy="0.0 0 -3.14" />
+    <parent link="base_link" />
+    <child link="lidar_link" />
+
+  </joint>
+
   <!-- /////////////////////////////////////////////  Lidar Plugin     //////////////////////////////////////  -->
+
 
 
 <gazebo reference="lidar_link">
