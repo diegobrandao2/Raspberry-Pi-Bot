@@ -15,6 +15,7 @@ setup(
         (os.path.join('share',package_name,'meshes'),glob('meshes/*')),
         (os.path.join('share',package_name,'launch'),glob('launch/*')),
         (os.path.join('share',package_name,'urdf'),glob('urdf/*')),
+        (os.path.join('share',package_name,'worlds'),glob('worlds/*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -27,6 +28,7 @@ setup(
         'console_scripts': [
             'publisher_node = vision_rpi_bot.publisher:main',
             'subscriber_node = vision_rpi_bot.subscriber:main',
+            'qr_maze_solver_node = vision_rpi_bot.qr_maze_drive:main',
         ],
     },
 )
